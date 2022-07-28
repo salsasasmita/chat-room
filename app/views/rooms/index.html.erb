@@ -1,19 +1,28 @@
 <div class="container-fluid">
   <div class="row">
-      <div class="col-3">
-        <%= render 'form', room: Room.new %>
-        <hr>
-        <% @rooms.each do |room| %>
-          <div class="card col mb-3">
-          <%= link_to room do %>
-              <div class="card-body">
-                <%= room.name %>
-              </div>
-          <% end %>
-          <%= button_to "Destroy this room", @room, method: :delete %>
-          </div>
-        <% end %>
+    <div class="col-3 rooms-sidebar">
+      <div class="card no-outline">
+        <div class="card-body">
+          <small>Logged in as</small>
+          <br>
+          <b><%= current_user.username %></b>
+        </div>
       </div>
+      <br>
+      <ht>
+      <%= render 'form', room: Room.new %>
+      <hr>
+      <% @rooms.each do |room| %>
+      <%= link_to room, class:"room-link" do %>
+        <% active_class = (@room == room) ? 'active' : ''%>
+          <div class="card col mb-3 room-card <%= active_class %>">
+            <div class="card-body">
+              <span class="name"><%= room.name %></span>
+            </div>
+          </div>
+      <% end %>
+      <% end %>
+    </div>
       <div class="col-8">
         <% if @room.present? %>
         <div class="chat-room">
@@ -28,7 +37,7 @@
           <% @room.messages.each do |message|%>
             <div class="message mb-2 <%= 'me' if message.user == current_user %>" >
               <div class="content-container">
-                <div class"content">
+                <div class="content">
                   <%= message.content %>
                 </div>
                 <div class="author">
